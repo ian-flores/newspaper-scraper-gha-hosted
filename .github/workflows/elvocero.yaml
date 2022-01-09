@@ -1,0 +1,54 @@
+on: 
+  schedule:
+    - cron: "0 * * * *"
+  pull_request:
+    branches:
+      - master
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+name: "El Vocero Scraper"
+
+jobs:
+  scraper:
+    name: Scrape "El Vocero"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install AWS CLI
+      id: install-aws-cli
+      uses: unfor19/install-aws-cli-action@v1
+      with:
+        version: 2     
+        verbose: false 
+
+    - name: Configure AWS credentials
+      id: creds
+      uses: aws-actions/configure-aws-credentials@master
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Authenticate with ECR
+      id: auth-ecr
+      run: |
+        aws ecr get-login-password --region ${{ secrets.AWS_REGION }}| \
+        docker login --username AWS --password-stdin ${{ secrets.ACCOUNT_ID}}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+    - name: Download "El Vocero" container
+      id: download-elvocero-container
+      run: |
+        docker pull ${{ secrets.ELVOCERO_CONTAINER_IMAGE }}
+    
+    - name: Run "El Vocero" container
+      id: run-elvocero-container
+      run: |
+        docker run ${{ secrets.ELVOCERO_CONTAINER_IMAGE }}
+      
+
+
