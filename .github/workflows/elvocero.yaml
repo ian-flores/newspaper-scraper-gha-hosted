@@ -7,11 +7,11 @@ permissions:
   id-token: write
   contents: read
 
-name: "ENDI Scraper"
+name: "El Vocero Scraper"
 
 jobs:
   scraper:
-    name: Scrape "ENDI"
+    name: Scrape "El Vocero"
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -37,15 +37,15 @@ jobs:
         aws ecr get-login-password --region ${{ secrets.AWS_REGION }}| \
         docker login --username AWS --password-stdin ${{ secrets.ACCOUNT_ID}}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
-    - name: Download "ENDI" container
-      id: download-endi-container
+    - name: Download "El Vocero" container
+      id: download-elvocero-container
       run: |
-        docker pull ${{ secrets.ENDI_CONTAINER_IMAGE }}
+        docker pull ${{ secrets.ELVOCERO_CONTAINER_IMAGE }}
     
-    - name: Run "ENDI" container
-      id: run-endi-container
+    - name: Run "El Vocero" container
+      id: run-elvocero-container
       run: |
-        docker run ${{ secrets.ENDI_CONTAINER_IMAGE }}
+        docker run ${{ secrets.ELVOCERO_CONTAINER_IMAGE }}
       
 
 
