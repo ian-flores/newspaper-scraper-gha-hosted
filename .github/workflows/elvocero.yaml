@@ -40,12 +40,12 @@ jobs:
     - name: Download "El Vocero" container
       id: download-elvocero-container
       run: |
-        docker pull ${{ secrets.ELVOCERO_CONTAINER_IMAGE }}
+        docker pull ${{ secrets.ELVOCERO_IMAGE }}
     
     - name: Run "El Vocero" container
       id: run-elvocero-container
       run: |
-        docker run ${{ secrets.ELVOCERO_CONTAINER_IMAGE }}
+        docker run ${{ secrets.ELVOCERO_IMAGE }}
       
 
 
